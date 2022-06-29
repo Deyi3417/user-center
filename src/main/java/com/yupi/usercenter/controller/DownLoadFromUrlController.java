@@ -21,9 +21,13 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * @author liudy23
+ * @date 2022-06-29
+ */
 @RestController
 @RequestMapping("/download")
-public class downloadFromUrlController {
+public class DownLoadFromUrlController {
 
     @Resource
     private UserMapper userMapper;
@@ -104,8 +108,4 @@ public class downloadFromUrlController {
         response.setContentType("application/vnd.ms-excel;charset=UTF-8");
         response.setHeader("Content-Disposition","attachment;filename=\""+ "fileName" + "\"");
     }
-
-
-
-
 }
