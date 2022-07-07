@@ -2,6 +2,7 @@ package com.yupi.usercenter.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yupi.usercenter.model.domain.User;
+import com.yupi.usercenter.model.domain.vo.UserVo;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import javax.servlet.http.HttpServletRequest;
@@ -52,4 +53,5 @@ public interface UserService extends IService<User> {
 
     List<Map<String, Object>> getUsers();
 
+    UserVo obtainUser(Integer id);
 }

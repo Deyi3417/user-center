@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yupi.usercenter.constant.UserConstant;
 import com.yupi.usercenter.model.domain.User;
+import com.yupi.usercenter.model.domain.vo.UserVo;
 import com.yupi.usercenter.service.UserService;
 import com.yupi.usercenter.mapper.UserMapper;
 import lombok.extern.log4j.Log4j;
@@ -190,6 +191,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Override
     public List<Map<String, Object>> getUsers() {
         return this.baseMapper.getUsers();
+    }
+
+    @Override
+    public UserVo obtainUser(Integer id) {
+        return this.baseMapper.obtainUser(id);
     }
 
 }

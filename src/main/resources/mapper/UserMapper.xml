@@ -51,4 +51,32 @@
         `yupi`.`user`
         LIMIT 0, 1000;
     </select>
+
+    <select id="obtainUser" resultType="com.yupi.usercenter.model.domain.vo.UserVo">
+        SELECT
+            u.id,
+            u.username,
+            u.userAccount,
+            u.gender,
+            (CASE
+                 WHEN u.gender = 1 THEN '女'
+                 WHEN u.gender = 0 THEN '男'
+                END)genderName,
+            u.phone,
+            u.email,
+            u.userStatus,
+            (CASE
+                 WHEN u.userStatus = 1 THEN '异常'
+                 WHEN u.userStatus = 0 THEN '正常'
+                END)statusName,
+            u.createTime,
+            u.updateTime,
+            u.isDelete,
+            u.userRole,
+            (CASE
+                 WHEN u.userRole = 1 THEN '管理员'
+                 WHEN u.userRole = 0 THEN '普通成员'
+                END)roleName
+        FROM `user` u WHERE u.id = #{id};
+    </select>
 </mapper>
