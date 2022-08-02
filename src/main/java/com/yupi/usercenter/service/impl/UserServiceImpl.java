@@ -2,10 +2,12 @@ package com.yupi.usercenter.service.impl;
 import java.io.*;
 import java.util.Date;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yupi.usercenter.constant.UserConstant;
 import com.yupi.usercenter.model.domain.User;
+import com.yupi.usercenter.model.domain.vo.ExportVO;
 import com.yupi.usercenter.model.domain.vo.UserVo;
 import com.yupi.usercenter.service.UserService;
 import com.yupi.usercenter.mapper.UserMapper;
@@ -196,6 +198,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Override
     public UserVo obtainUser(Integer id) {
         return this.baseMapper.obtainUser(id);
+    }
+
+    @Override
+    public List<User> getUserList() {
+        List<User> userList = this.baseMapper.selectList(new QueryWrapper<User>().eq("isDelete", 0));
+        return userList;
+    }
+
+    @Override
+    public List<ExportVO> getExportUser() {
+        return this.baseMapper.getExportUser();
     }
 
 }

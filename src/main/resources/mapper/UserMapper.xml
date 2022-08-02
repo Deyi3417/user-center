@@ -5,78 +5,91 @@
 <mapper namespace="com.yupi.usercenter.mapper.UserMapper">
 
     <resultMap id="BaseResultMap" type="com.yupi.usercenter.model.domain.User">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="username" column="username" jdbcType="VARCHAR"/>
-            <result property="userAccount" column="userAccount" jdbcType="VARCHAR"/>
-            <result property="avatarUrl" column="avatarUrl" jdbcType="VARCHAR"/>
-            <result property="gender" column="gender" jdbcType="INTEGER"/>
-            <result property="userPassword" column="userPassword" jdbcType="VARCHAR"/>
-            <result property="phone" column="phone" jdbcType="VARCHAR"/>
-            <result property="email" column="email" jdbcType="VARCHAR"/>
-            <result property="userStatus" column="userStatus" jdbcType="INTEGER"/>
-            <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
-            <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
-            <result property="isDelete" column="isDelete" jdbcType="INTEGER"/>
-            <result property="userRole" column="userRole" jdbcType="INTEGER"/>
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="userAccount" column="userAccount" jdbcType="VARCHAR"/>
+        <result property="avatarUrl" column="avatarUrl" jdbcType="VARCHAR"/>
+        <result property="gender" column="gender" jdbcType="INTEGER"/>
+        <result property="userPassword" column="userPassword" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="userStatus" column="userStatus" jdbcType="INTEGER"/>
+        <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
+        <result property="isDelete" column="isDelete" jdbcType="INTEGER"/>
+        <result property="userRole" column="userRole" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,username,userAccount,
+        id
+        ,username,userAccount,
         avatarUrl,gender,userPassword,
         phone,email,userStatus,
         createTime,updateTime,isDelete,
         userRole
     </sql>
     <select id="getUsers" resultType="java.util.Map">
-        SELECT 	`id`,
-            `username`,
-            `userAccount`,
-            (CASE gender
-                WHEN 0 THEN '男'
-                WHEN 1 THEN '女'
-            END)gender,
-            `phone`,
-            `email`,
-            (CASE userStatus
-                WHEN 0 THEN '正常'
-                ELSE '异常'
-            END)userStatus,
-            DATE_FORMAT(createTime,'%Y-%m-%d %H:%i')createTime,
-            `isDelete`,
-            (CASE userRole
-                WHEN 0 THEN '普通用户'
-                WHEN 1 THEN '管理员'
-            END)userRole
-        FROM
-        `yupi`.`user`
-        LIMIT 0, 1000;
+        SELECT `id`,
+               `username`,
+               `userAccount`,
+               (CASE gender
+                    WHEN 0 THEN '男'
+                    WHEN 1 THEN '女'
+                   END)                                  gender,
+               `phone`,
+               `email`,
+               (CASE userStatus
+                    WHEN 0 THEN '正常'
+                    ELSE '异常'
+                   END)                                  userStatus,
+               DATE_FORMAT(createTime, '%Y-%m-%d %H:%i') createTime,
+               `isDelete`,
+               (CASE userRole
+                    WHEN 0 THEN '普通用户'
+                    WHEN 1 THEN '管理员'
+                   END)                                  userRole
+        FROM `yupi`.`user` LIMIT 0, 1000;
     </select>
 
     <select id="obtainUser" resultType="com.yupi.usercenter.model.domain.vo.UserVo">
-        SELECT
-            u.id,
-            u.username,
-            u.userAccount,
-            u.gender,
-            (CASE
-                 WHEN u.gender = 1 THEN '女'
-                 WHEN u.gender = 0 THEN '男'
-                END)genderName,
-            u.phone,
-            u.email,
-            u.userStatus,
-            (CASE
-                 WHEN u.userStatus = 1 THEN '异常'
-                 WHEN u.userStatus = 0 THEN '正常'
-                END)statusName,
-            u.createTime,
-            u.updateTime,
-            u.isDelete,
-            u.userRole,
-            (CASE
-                 WHEN u.userRole = 1 THEN '管理员'
-                 WHEN u.userRole = 0 THEN '普通成员'
-                END)roleName
-        FROM `user` u WHERE u.id = #{id};
+        SELECT u.id,
+               u.username,
+               u.userAccount,
+               u.gender,
+               (CASE
+                    WHEN u.gender = 1 THEN '女'
+                    WHEN u.gender = 0 THEN '男'
+                   END) genderName,
+               u.phone,
+               u.email,
+               u.userStatus,
+               (CASE
+                    WHEN u.userStatus = 1 THEN '异常'
+                    WHEN u.userStatus = 0 THEN '正常'
+                   END) statusName,
+               u.createTime,
+               u.updateTime,
+               u.isDelete,
+               u.userRole,
+               (CASE
+                    WHEN u.userRole = 1 THEN '管理员'
+                    WHEN u.userRole = 0 THEN '普通成员'
+                   END) roleName
+        FROM `user` u
+        WHERE u.id = #{id};
+    </select>
+    <select id="getExportUser" resultType="com.yupi.usercenter.model.domain.vo.ExportVO">
+        SELECT u.`id`,
+               u.`username`,
+               u.`userAccount`,
+               (CASE u.`gender`
+                    WHEN 0 THEN '男'
+                    WHEN 1 THEN '女'
+                    ELSE '--'
+                   END) genderName,
+               u.`phone`,
+               u.`createTime`
+        FROM `user` u
+        WHERE u.`isDelete` = 0;
     </select>
 </mapper>

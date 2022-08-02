@@ -2,6 +2,7 @@ package com.yupi.usercenter.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yupi.usercenter.model.domain.User;
+import com.yupi.usercenter.model.domain.vo.ExportVO;
 import com.yupi.usercenter.model.domain.vo.UserVo;
 import org.apache.poi.ss.usermodel.Workbook;
 
@@ -54,4 +55,18 @@ public interface UserService extends IService<User> {
     List<Map<String, Object>> getUsers();
 
     UserVo obtainUser(Integer id);
+
+    /**
+     * 获取用户列表
+     *
+     * @return result
+     */
+    List<User> getUserList();
+
+    /**
+     * 获取用户信息-导出excel
+     *
+     * @return result
+     */
+    List<ExportVO> getExportUser();
 }
