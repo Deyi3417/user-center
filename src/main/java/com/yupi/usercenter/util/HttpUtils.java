@@ -4,12 +4,14 @@ import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -21,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.net.URLDecoder;
 import java.util.Map;
 
 @Slf4j
@@ -78,6 +81,7 @@ public class HttpUtils {
             e.printStackTrace();
         }
     }
+
     public static String get(String url, Map<String, String> params) {
         try {
             log.info("get调用地址url=" + url + " 参数：" + params.toString());
@@ -207,7 +211,7 @@ public class HttpUtils {
                 BufferedImage bufferedImage = pdfRenderer.renderImage(0);
                 // todo 多页pdf待转化
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                ImageIO.write(bufferedImage,"png", byteArrayOutputStream);
+                ImageIO.write(bufferedImage, "png", byteArrayOutputStream);
                 byte[] bytes = byteArrayOutputStream.toByteArray();
                 os.write(bytes, 0, bytes.length);
 //                ImageIO.write(bufferedImage, "png", new File("D:\\tmp\\liudy23\\ToImage02.png"));
@@ -220,5 +224,78 @@ public class HttpUtils {
             e.printStackTrace();
         }
 //        return null;
+    }
+
+
+    /**
+     * get请求
+     *
+     * @param url 目标url
+     * @return result
+     */
+    public static String get(String url) {
+        try {
+            CloseableHttpClient httpClient = HttpClients.createDefault();
+
+            HttpGet httpGet = new HttpGet(url);
+            httpGet.addHeader("Content-Type", "application/json;charset=UTF-8");
+            httpGet.setHeader("Accept", "application/json");
+            // 连接主机服务超时时间
+            RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(10000)
+                    // 请求超时时间
+                    .setConnectionRequestTimeout(10000)
+                    // 数据读取超时时间
+                    .setSocketTimeout(10000)
+                    .build();
+            httpGet.setConfig(requestConfig);
+            CloseableHttpResponse response = httpClient.execute(httpGet);
+            String resStr = null;
+            if (response.getStatusLine().getStatusCode() == 200) {
+                HttpEntity entity = response.getEntity();
+                if (entity != null) {
+                    resStr = EntityUtils.toString(entity, "UTF-8");
+                }
+                log.info("get调用返回：" + resStr);
+                httpClient.close();
+                response.close();
+            }
+            return resStr;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String httpPost(String url,String jsonstr){
+        // post请求返回结果
+        String response = null;
+        DefaultHttpClient httpClient = new DefaultHttpClient();
+        HttpPost method = new HttpPost(url);
+        try {
+            if (null != jsonstr && !"".equals(jsonstr)) {
+                //解决中文乱码问题
+                StringEntity entity = new StringEntity(jsonstr, "utf-8");
+                entity.setContentEncoding("UTF-8");
+                entity.setContentType("application/json");
+                method.setEntity(entity);
+            }
+            HttpResponse result = httpClient.execute(method);
+            url = URLDecoder.decode(url, "UTF-8");
+            if (result != null) {
+                int statusCode = result.getStatusLine().getStatusCode();
+                if (statusCode == 200) {
+                    HttpEntity httpEntity = result.getEntity();
+                    if (httpEntity != null) {
+                        response = EntityUtils.toString(httpEntity, "UTF-8");
+                        return response;
+                    }
+                } else {
+                    return "" + statusCode;
+                }
+            }
+        } catch (Exception e) {
+            log.info("post请求提交失败:" + url, e);
+        }
+        return response;
     }
 }
