@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yupi.usercenter.constant.UserConstant;
 import com.yupi.usercenter.model.domain.User;
 import com.yupi.usercenter.model.domain.vo.ExportVO;
+import com.yupi.usercenter.model.domain.vo.TestVO;
 import com.yupi.usercenter.model.domain.vo.UserVo;
 import com.yupi.usercenter.service.UserService;
 import com.yupi.usercenter.mapper.UserMapper;
@@ -209,6 +210,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Override
     public List<ExportVO> getExportUser() {
         return this.baseMapper.getExportUser();
+    }
+
+    @Override
+    public List<TestVO> getUserVO() {
+        return this.baseMapper.getUserVO();
+    }
+
+    @Override
+    public User getUserById(Integer id) {
+        return this.baseMapper.selectById(id);
     }
 
 }

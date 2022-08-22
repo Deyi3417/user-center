@@ -92,4 +92,18 @@
         FROM `user` u
         WHERE u.`isDelete` = 0;
     </select>
+    <select id="getUserVO" resultType="com.yupi.usercenter.model.domain.vo.TestVO">
+        SELECT
+            u.`id`,
+            u.`username`,
+            u.`userAccount`,
+            u.`createTime`,
+            u.`updateTime`,
+            DATE_FORMAT(u.`updateTime`,'%Y-%m-%d') formatTime
+        FROM
+            `user` u
+        WHERE u.`isDelete` = 0
+    </select>
+
+
 </mapper>

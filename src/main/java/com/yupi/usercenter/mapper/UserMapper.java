@@ -3,6 +3,7 @@ package com.yupi.usercenter.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yupi.usercenter.model.domain.User;
 import com.yupi.usercenter.model.domain.vo.ExportVO;
+import com.yupi.usercenter.model.domain.vo.TestVO;
 import com.yupi.usercenter.model.domain.vo.UserVo;
 import org.apache.ibatis.annotations.MapKey;
 
@@ -26,4 +27,11 @@ public interface UserMapper extends BaseMapper<User> {
      * @return result
      */
     List<ExportVO> getExportUser();
+
+    /**
+     * 获取用户列表
+     * @return 用户列表信息
+     */
+    List<TestVO> getUserVO();
+
 }

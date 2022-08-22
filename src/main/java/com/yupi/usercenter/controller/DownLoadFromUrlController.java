@@ -34,7 +34,7 @@ public class DownLoadFromUrlController {
 
     @GetMapping("/all")
     public List<User> all() {
-        return userMapper.selectList(new QueryWrapper<User>().eq("isDelete",0));
+        return userMapper.selectList(new QueryWrapper<User>().eq("isDelete", 0));
     }
 
     @GetMapping("/url")
@@ -61,7 +61,7 @@ public class DownLoadFromUrlController {
         PdfDocument pdfDocument = new PdfDocument();
         pdfDocument.loadFromFile("D:\\File_liudy23\\test\\test02.pdf");
         // 设置精度-图片清晰度
-        BufferedImage bufferedImage = pdfDocument.saveAsImage(0, PdfImageType.Bitmap, 600,400);
+        BufferedImage bufferedImage = pdfDocument.saveAsImage(0, PdfImageType.Bitmap, 600, 400);
         // 图片流转二进制数组
         ByteArrayOutputStream os = new ByteArrayOutputStream(1024);
         ImageIO.write(bufferedImage, "png", os);
@@ -69,8 +69,8 @@ public class DownLoadFromUrlController {
         System.out.println(Arrays.toString(bytes));
         ServletOutputStream outputStream = response.getOutputStream();
 //        outputStream.write(bytes);
-        outputStream.write(bytes,0,bytes.length);
-        ImageIO.write(bufferedImage,"png", new File("D:\\File_liudy23\\test\\ToImage70.png"));
+        outputStream.write(bytes, 0, bytes.length);
+        ImageIO.write(bufferedImage, "png", new File("D:\\File_liudy23\\test\\ToImage70.png"));
         outputStream.close();
         pdfDocument.close();
 
@@ -90,7 +90,7 @@ public class DownLoadFromUrlController {
         byte[] bytes = os.toByteArray();
         ServletOutputStream outputStream = response.getOutputStream();
 //        outputStream.write(bytes);
-        outputStream.write(bytes,0,bytes.length);
+        outputStream.write(bytes, 0, bytes.length);
         outputStream.close();
         pdDocument.close();
         is.close();
@@ -106,6 +106,6 @@ public class DownLoadFromUrlController {
         response.reset();
         // response.setContentType("application/vnd.ms-excel;charset=UTF-8");
         response.setContentType("application/vnd.ms-excel;charset=UTF-8");
-        response.setHeader("Content-Disposition","attachment;filename=\""+ "fileName" + "\"");
+        response.setHeader("Content-Disposition", "attachment;filename=\"" + "fileName" + "\"");
     }
 }

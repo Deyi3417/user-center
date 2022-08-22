@@ -29,13 +29,13 @@ public class UserController {
 
     @PostMapping("/register")
     public Long userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
-        if (userRegisterRequest == null){
+        if (userRegisterRequest == null) {
             return null;
         }
         String userAccount = userRegisterRequest.getUserAccount();
         String userPassword = userRegisterRequest.getUserPassword();
         String checkPassword = userRegisterRequest.getCheckPassword();
-        if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword)){
+        if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword)) {
             return null;
         }
         long id = userService.userRegister(userAccount, userPassword, checkPassword);
@@ -43,8 +43,8 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public User doLogin(@RequestBody UserLoginRequest userLoginRequest, HttpServletRequest request){
-        if (userLoginRequest == null){
+    public User doLogin(@RequestBody UserLoginRequest userLoginRequest, HttpServletRequest request) {
+        if (userLoginRequest == null) {
             return null;
         }
         String userAccount = userLoginRequest.getUserAccount();
@@ -52,20 +52,19 @@ public class UserController {
         if (StringUtils.isAnyBlank(userAccount, userPassword)) {
             return null;
         }
-        User user = userService.userLogin(userAccount, userPassword, request);
-        return user;
+        return userService.userLogin(userAccount, userPassword, request);
     }
 
     @GetMapping("/search")
     public List<User> searchUser(String username, HttpServletRequest request) {
         // 鉴权，仅管理员可以查询
-        if (!isAdmin(request)){
+        if (!isAdmin(request)) {
             return new ArrayList<>();
         }
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
-        if (StringUtils.isNotBlank(username)){
+        if (StringUtils.isNotBlank(username)) {
             // 默认模糊查询
-            userQueryWrapper.like("username",username);
+            userQueryWrapper.like("username", username);
         }
         List<User> userList = userService.list(userQueryWrapper);
         return userList.stream().map(user1 -> userService.getSafetyUser(user1)).collect(Collectors.toList());
@@ -75,7 +74,7 @@ public class UserController {
         // 仅管理员可以查询
         Object userObj = request.getSession().getAttribute(UserConstant.USER_LOGIN_STATE);
         User user = (User) userObj;
-        if (user == null || user.getUserRole() != UserConstant.ADMIN_ROLE){
+        if (user == null || user.getUserRole() != UserConstant.ADMIN_ROLE) {
             return false;
         }
         return true;

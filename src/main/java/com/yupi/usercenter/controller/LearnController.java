@@ -5,19 +5,16 @@ import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.yupi.usercenter.model.domain.User;
 import com.yupi.usercenter.model.domain.vo.ExportVO;
+import com.yupi.usercenter.model.domain.vo.TestVO;
 import com.yupi.usercenter.model.domain.vo.UserVo;
 import com.yupi.usercenter.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -77,4 +74,14 @@ public class LearnController {
         os.close();
     }
 
+    @PostMapping("/testJSON")
+    public List<TestVO> getUserVo() {
+        List<TestVO> userVos = userService.getUserVO();
+        return userVos;
+    }
+
+    @GetMapping("/test")
+    public User getUser(Integer id) {
+        return userService.getUserById(id);
+    }
 }
