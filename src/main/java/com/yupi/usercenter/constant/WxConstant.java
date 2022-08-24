@@ -11,16 +11,20 @@ public interface WxConstant {
     /**
      * wxAppID
      */
-    String wxAppID = "wx1b96083a11590564";
+    String WX_APPID = "wx1b96083a11590564";
 
     /**
      * wxAppsecret
      */
-    String wxAppsecret = "716393f3c83f41ec0e08bd4e33f989f0";
+    String WX_APPSECRET = "716393f3c83f41ec0e08bd4e33f989f0";
 
     /**
      * accessTokenUrl
      */
-    String wxAccessTokenUrl = "https://api.weixin.qq.com/cgi-bin/token";
+    String WX_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token";
 
+    /**
+     * sendMessageUrl
+     */
+    String WX_SEND_MESSAGE_URL = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=";
 }

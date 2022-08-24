@@ -29,9 +29,13 @@ public class WxThirdController {
 
     @PostMapping("/sendWxMessage")
     public BaseResponse<?> sendWxMessage() {
+        // 模板id
         String templateId = "BwZ2jRkndCW6d5KE1kyXVPeDL_-St5UrN7ZaS2pYe0E";
+        // 发送的目标用户
         String touser = "oG9_s6luZT0xr1vY5Ba4ocFgZPm4";
+        // 要跳转的url
         String url = "https://www.baidu.com";
+        // 模板消息内容
         WxTemplateMessage message = new WxTemplateMessage();
         message.setTouser(touser);
         message.setTemplate_id(templateId);
@@ -46,8 +50,8 @@ public class WxThirdController {
         params.put("remark", WxTemplateMessage.item("2022-08-31是最后截止时间，请注意", "#173177"));
         message.setData(params);
         String data = JSON.toJSONString(message);
+        // 发送模板消息
         String result = wxThirdService.sendTemplateMessage(data);
         return ResultUtils.success(result);
     }
-
 }
