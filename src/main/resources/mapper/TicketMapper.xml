@@ -2,21 +2,21 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="generator.mapper.TicketMapper">
+<mapper namespace="com.yupi.usercenter.mapper.TicketMapper">
 
-    <resultMap id="BaseResultMap" type="generator.domain.Ticket">
+    <resultMap id="BaseResultMap" type="com.yupi.usercenter.model.domain.Ticket">
             <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="ticket_code" column="ticket_code" jdbcType="VARCHAR"/>
-            <result property="ticket_level" column="ticket_level" jdbcType="TINYINT"/>
+            <result property="ticketCode" column="ticket_code" jdbcType="VARCHAR"/>
+            <result property="ticketLevel" column="ticket_level" jdbcType="TINYINT"/>
             <result property="dlt" column="dlt" jdbcType="TINYINT"/>
-            <result property="handle_way" column="handle_way" jdbcType="TINYINT"/>
-            <result property="user_id" column="user_id" jdbcType="BIGINT"/>
-            <result property="create_id" column="create_id" jdbcType="BIGINT"/>
-            <result property="create_name" column="create_name" jdbcType="VARCHAR"/>
-            <result property="create_time" column="create_time" jdbcType="TIMESTAMP"/>
-            <result property="modify_id" column="modify_id" jdbcType="BIGINT"/>
-            <result property="modify_name" column="modify_name" jdbcType="VARCHAR"/>
-            <result property="modify_time" column="modify_time" jdbcType="TIMESTAMP"/>
+            <result property="handleWay" column="handle_way" jdbcType="TINYINT"/>
+            <result property="userId" column="user_id" jdbcType="BIGINT"/>
+            <result property="createId" column="create_id" jdbcType="BIGINT"/>
+            <result property="createName" column="create_name" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="modifyId" column="modify_id" jdbcType="BIGINT"/>
+            <result property="modifyName" column="modify_name" jdbcType="VARCHAR"/>
+            <result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
             <result property="source" column="source" jdbcType="VARCHAR"/>
             <result property="price" column="price" jdbcType="DOUBLE"/>
     </resultMap>
