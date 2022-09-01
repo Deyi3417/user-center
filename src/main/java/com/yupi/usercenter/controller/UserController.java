@@ -7,6 +7,8 @@ import com.yupi.usercenter.model.domain.request.UserLoginRequest;
 import com.yupi.usercenter.model.domain.request.UserRegisterRequest;
 import com.yupi.usercenter.service.UserService;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.boot.SpringBootVersion;
+import org.springframework.core.SpringVersion;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -78,5 +80,12 @@ public class UserController {
             return false;
         }
         return true;
+    }
+
+    public static void main(String[] args) {
+        String springVersion = SpringVersion.getVersion();
+        String springBootVersion = SpringBootVersion.getVersion();
+        System.out.println("Spring版本：" + springVersion);
+        System.out.println("SpringBoot版本：" + springBootVersion);
     }
 }

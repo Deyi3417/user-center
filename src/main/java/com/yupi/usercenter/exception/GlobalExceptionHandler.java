@@ -35,7 +35,6 @@ public class GlobalExceptionHandler {
         return ResultUtils.error(ErrorCode.SYSTEM_ERROR, e.getMessage(), "");
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public BaseResponse methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
         log.info("MethodArgumentNotValidException", e);
@@ -45,7 +44,7 @@ public class GlobalExceptionHandler {
             List<FieldError> fieldErrors = exceptions.getFieldErrors();
             if (!fieldErrors.isEmpty()) {
                 FieldError fieldError = fieldErrors.get(0);
-                return ResultUtils.error(Integer.valueOf(fieldError.getCode()),fieldError.getDefaultMessage(),"");
+                return ResultUtils.error(HttpStatus.BAD_REQUEST.value(), fieldError.getDefaultMessage(), "");
             }
         }
         return ResultUtils.error(ErrorCode.PARAMS_ERROR, e.getMessage(),"");

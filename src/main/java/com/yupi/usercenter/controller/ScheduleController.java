@@ -2,6 +2,7 @@ package com.yupi.usercenter.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -14,10 +15,11 @@ import java.util.Date;
  */
 @Component
 @Slf4j
+@EnableScheduling
 public class ScheduleController {
 
     @Async
-    @Scheduled(cron = "0/2 * * * * ?")
+//    @Scheduled(cron = "0/2 * * * * ?")
     public void testSchedule() {
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

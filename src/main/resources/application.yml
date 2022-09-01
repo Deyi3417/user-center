@@ -9,13 +9,37 @@ spring:
 
   session:
     timeout: 86400
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  # Redis configuration
+  redis:
+    host: 192.168.50.132
+    port: 6379
+    password: 123456
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+        max-wait: 100ms
+
 server:
-  port: 8080
+  port: 9999
   servlet:
     context-path: /api
 
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true
+
+# Swagger configuration information
+swagger:
+  # Open swagger
+  enabled: true
+
+
+
 
 
