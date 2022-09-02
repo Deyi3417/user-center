@@ -3,11 +3,10 @@ package com.yupi.usercenter.controller;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
 import com.yupi.usercenter.common.BaseResponse;
 import com.yupi.usercenter.common.ResultUtils;
-import com.yupi.usercenter.mapstruct.user.UserConvert2DTO;
+import com.yupi.usercenter.mapstruct.basic.TicketConvert2DTO;
+import com.yupi.usercenter.mapstruct.basic.UserConvert2DTO;
 import com.yupi.usercenter.model.domain.Ticket;
 import com.yupi.usercenter.model.domain.User;
 import com.yupi.usercenter.model.domain.dto.TicketDTO;
@@ -129,7 +128,7 @@ public class LearnController {
     public BaseResponse<TicketDTO> mapstructTicket(@PathVariable("id") Long id) {
         Ticket ticket = ticketService.getById(id);
         // 深拷贝
-        TicketDTO ticketDTO = UserConvert2DTO.INSTANCE.toConvertTicketDTO(ticket);
+        TicketDTO ticketDTO = TicketConvert2DTO.INSTANCE.toConvertTicketDTO(ticket);
         return ResultUtils.success(ticketDTO);
     }
 }
