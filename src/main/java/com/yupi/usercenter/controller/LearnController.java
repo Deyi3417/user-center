@@ -3,12 +3,24 @@ package com.yupi.usercenter.controller;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
+import com.yupi.usercenter.common.BaseResponse;
+import com.yupi.usercenter.common.ResultUtils;
+import com.yupi.usercenter.mapstruct.user.UserConvert2DTO;
+import com.yupi.usercenter.model.domain.Ticket;
 import com.yupi.usercenter.model.domain.User;
+import com.yupi.usercenter.model.domain.dto.TicketDTO;
+import com.yupi.usercenter.model.domain.dto.UserDTO;
 import com.yupi.usercenter.model.domain.vo.ExportVO;
 import com.yupi.usercenter.model.domain.vo.TestVO;
 import com.yupi.usercenter.model.domain.vo.UserVo;
+import com.yupi.usercenter.service.TicketService;
 import com.yupi.usercenter.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -27,11 +39,15 @@ import java.util.List;
  */
 @Slf4j
 @RestController
+@Api(tags = "Learning Controller")
 @RequestMapping("/learn")
 public class LearnController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private TicketService ticketService;
 
     @GetMapping("/user")
     public UserVo getUserById(@RequestParam Integer id) {
@@ -80,8 +96,40 @@ public class LearnController {
         return userVos;
     }
 
-    @GetMapping("/test")
-    public User getUser(Integer id) {
-        return userService.getUserById(id);
+    @ApiOperation("获取用户测试: id=3")
+    @GetMapping("/getUser")
+    public BaseResponse<UserDTO> getUser() {
+        User user = userService.getUserById(3);
+        UserDTO userDTO = new UserDTO();
+        BeanUtils.copyProperties(user, userDTO);
+        return ResultUtils.success(userDTO);
+    }
+
+    @ApiOperation("根据用户id获取用户测试--BeanUtils浅拷贝DTO")
+    @GetMapping("/copy/{id}")
+    public BaseResponse<UserDTO> copyProperties(@PathVariable("id") Long id) {
+        User user = userService.getById(id);
+        UserDTO userDTO = new UserDTO();
+        // 浅拷贝
+        BeanUtils.copyProperties(user, userDTO);
+        return ResultUtils.success(userDTO);
+    }
+
+    @ApiOperation("--mapstruct深拷贝userDTO")
+    @GetMapping("/user/mapstruct/{id}")
+    public BaseResponse<UserDTO> mapstructUser(@PathVariable("id") Long id) {
+        User user = userService.getById(id);
+        // 深拷贝
+        UserDTO dto = UserConvert2DTO.INSTANCE.toCovertUserDTO(user);
+        return ResultUtils.success(dto);
+    }
+
+    @ApiOperation("--mapstruct深拷贝ticketDTO")
+    @GetMapping("/ticket/mapstruct/{id}")
+    public BaseResponse<TicketDTO> mapstructTicket(@PathVariable("id") Long id) {
+        Ticket ticket = ticketService.getById(id);
+        // 深拷贝
+        TicketDTO ticketDTO = UserConvert2DTO.INSTANCE.toConvertTicketDTO(ticket);
+        return ResultUtils.success(ticketDTO);
     }
 }

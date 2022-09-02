@@ -40,11 +40,11 @@ public class SwaggerConfig {
                 // 设置哪些接口暴露给Swagger展示
                 .select()
                 // 扫描所有有注解的api，用这种方式更灵活
-                .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
+                // .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 // 扫描指定包中的swagger注解
                 //.apis(RequestHandlerSelectors.basePackage("com.ruoyi.project.tool.swagger"))
                 // 扫描所有 .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.any())
+                // .paths(PathSelectors.any())
                 .build();
     }
 
@@ -55,11 +55,11 @@ public class SwaggerConfig {
         // 用ApiInfoBuilder进行定制
         return new ApiInfoBuilder()
                 // 设置标题
-                .title("title title")
+                .title("user-center")
                 // 描述
-                .description("描述：用于管理集团旗下公司的人员信息,具体包括XXX,XXX模块...")
+                .description("描述：用户中心swagger,具体包括XXX,XXX模块...")
                 // 作者信息
-                .contact(new Contact("liudy23", "https://baidu.com", "18811553417@163.com"))
+                .contact(new Contact("liudy23", "https://mp.csdn.net/mp_blog/manage/article?spm=1010.2135.3001.5416", "18811553417@163.com"))
                 // 版本
                 .version("版本号:v1.0")
                 .build();

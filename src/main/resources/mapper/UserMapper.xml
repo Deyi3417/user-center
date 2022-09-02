@@ -81,28 +81,28 @@
     <select id="getExportUser" resultType="com.yupi.usercenter.model.domain.vo.ExportVO">
         SELECT u.`id`,
                u.`username`,
-               u.`userAccount`,
+               u.`user_account`,
                (CASE u.`gender`
                     WHEN 0 THEN '男'
                     WHEN 1 THEN '女'
                     ELSE '--'
                    END) genderName,
                u.`phone`,
-               u.`createTime`
+               u.`create_time`
         FROM `user` u
-        WHERE u.`isDelete` = 0;
+        WHERE u.`is_delete` = 0;
     </select>
     <select id="getUserVO" resultType="com.yupi.usercenter.model.domain.vo.TestVO">
         SELECT
             u.`id`,
             u.`username`,
-            u.`userAccount`,
-            u.`createTime`,
-            u.`updateTime`,
-            DATE_FORMAT(u.`updateTime`,'%Y-%m-%d') formatTime
+            u.`user_account`,
+            u.`create_time`,
+            u.`update_time`,
+            DATE_FORMAT(u.`update_time`,'%Y-%m-%d') formatTime
         FROM
             `user` u
-        WHERE u.`isDelete` = 0
+        WHERE u.`is_delete` = 0
     </select>
 
 
