@@ -1,7 +1,10 @@
 package com.yupi.usercenter.mapper;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yupi.usercenter.model.domain.Ticket;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+
+import java.util.List;
 
 /**
 * @author HP
@@ -11,6 +14,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface TicketMapper extends BaseMapper<Ticket> {
 
+    List<Ticket> getTicketList(Page<Ticket> ticketPage, Object o);
 }
 
 

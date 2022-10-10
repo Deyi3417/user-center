@@ -20,4 +20,5 @@ public interface TicketConvert2DTO {
      * @return TicketDTO
      */
     TicketDTO toConvertTicketDTO(Ticket ticket);
+
 }

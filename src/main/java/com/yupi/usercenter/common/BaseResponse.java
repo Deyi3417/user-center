@@ -38,7 +38,7 @@ public class BaseResponse<T> implements Serializable {
         this(code, data, "", "");
     }
     public BaseResponse(int code, String message) {
-        this(code, null, "", "");
+        this(code, null, message, "");
     }
 
     public BaseResponse(ErrorCode errorCode) {

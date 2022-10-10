@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yupi.usercenter.mapper.QcResponsibleDepartmentMapper">
+
+    <resultMap id="BaseResultMap" type="com.yupi.usercenter.model.domain.QcResponsibleDepartment">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="responsibleDepartmentName" column="responsible_department_name" jdbcType="VARCHAR"/>
+            <result property="parentId" column="parent_id" jdbcType="INTEGER"/>
+            <result property="level" column="level" jdbcType="SMALLINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,responsible_department_name,parent_id,
+        level
+    </sql>
+    <select id="getParentDepartment" resultType="com.yupi.usercenter.model.domain.vo.RandomTicketVO">
+        SELECT
+            res.`id` id,
+            res.`responsible_department_name` responsibleDepartmentName,
+            res.`parent_id` parentId,
+            res.`level`,
+            true as checkout
+        FROM `qc_random_unqualifiedticket_department` dep
+                LEFT JOIN `qc_responsible_department` res ON res.`id` = dep.`responsible_department_id`
+        WHERE dep.`random_unqualified_ticket_id` = #{id} AND res.`parent_id` = -1 AND res.`level` = 1
+    </select>
+    <select id="findChildDepartment" resultType="com.yupi.usercenter.model.domain.vo.RandomTicketVO">
+        SELECT
+            res.`id` id,
+            res.`responsible_department_name` responsibleDepartmentName,
+            res.`parent_id` parentId,
+            res.`level`,
+            true as checkout
+        FROM `qc_random_unqualifiedticket_department` dep
+                 LEFT JOIN `qc_responsible_department` res ON res.`id` = dep.`responsible_department_id`
+        WHERE res.`parent_id` = #{parentId}
+    </select>
+</mapper>

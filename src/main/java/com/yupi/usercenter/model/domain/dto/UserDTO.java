@@ -6,14 +6,12 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.util.Date;
-
 /**
  * @author : HP
  * @date : 2022/9/2
  */
 @Data
-@ApiModel(value = "UserDTO",description = "UserDTO传输类")
+@ApiModel(value = "UserDTO", description = "UserDTO传输类")
 public class UserDTO {
 
     /**
@@ -52,5 +50,11 @@ public class UserDTO {
      */
     @ApiModelProperty(value = "邮箱", name = "email")
     private String email;
+
+    /**
+     * testDTO 单独的字段
+     */
+    @ApiModelProperty(value = "testDTO", name = "UserDTO单独的字段")
+    private String testDTO;
 
 }

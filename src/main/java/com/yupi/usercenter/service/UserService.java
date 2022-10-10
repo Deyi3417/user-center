@@ -1,7 +1,9 @@
 package com.yupi.usercenter.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.yupi.usercenter.common.BaseResponse;
 import com.yupi.usercenter.model.domain.User;
+import com.yupi.usercenter.model.domain.dto.UpdateTicketDTO;
 import com.yupi.usercenter.model.domain.vo.ExportVO;
 import com.yupi.usercenter.model.domain.vo.TestVO;
 import com.yupi.usercenter.model.domain.vo.UserVo;

@@ -28,4 +28,11 @@
         modify_id,modify_name,modify_time,
         source,price
     </sql>
+    <select id="getTicketList" resultType="com.yupi.usercenter.model.domain.Ticket">
+        SELECT
+            *
+        FROM
+            `ticket` t
+        WHERE t.`dlt` = 0
+    </select>
 </mapper>

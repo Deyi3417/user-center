@@ -3,6 +3,8 @@ package com.yupi.usercenter.controller;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.yupi.usercenter.common.BaseResponse;
 import com.yupi.usercenter.common.ResultUtils;
 import com.yupi.usercenter.mapstruct.basic.TicketConvert2DTO;
@@ -11,6 +13,7 @@ import com.yupi.usercenter.model.domain.Ticket;
 import com.yupi.usercenter.model.domain.User;
 import com.yupi.usercenter.model.domain.dto.TicketDTO;
 import com.yupi.usercenter.model.domain.dto.UserDTO;
+import com.yupi.usercenter.model.domain.dto.UserDTO2;
 import com.yupi.usercenter.model.domain.vo.ExportVO;
 import com.yupi.usercenter.model.domain.vo.TestVO;
 import com.yupi.usercenter.model.domain.vo.UserVo;
@@ -131,4 +134,38 @@ public class LearnController {
         TicketDTO ticketDTO = TicketConvert2DTO.INSTANCE.toConvertTicketDTO(ticket);
         return ResultUtils.success(ticketDTO);
     }
+
+    @ApiOperation("--mapstruct深拷贝：dto 拷贝为 POJO")
+    @PostMapping("/toUser")
+    public BaseResponse<User> mapstructToUser(@RequestBody UserDTO dto) {
+        // 深拷贝
+        User user = UserConvert2DTO.INSTANCE.toConvertUser(dto);
+        return ResultUtils.success(user);
+    }
+
+
+    @ApiOperation("测试DTO在父类的基础上扩展")
+    @PostMapping("/testDTO")
+    public BaseResponse<User> extendPOJO(@RequestBody UserDTO2 dto) {
+        // 深拷贝
+        User user = JSONObject.parseObject(JSON.toJSONString(dto), User.class);
+        return ResultUtils.success(user);
+    }
+    @ApiOperation("将List<POJO>转化为List<DTO>")
+    @PostMapping("/testCopy")
+    public BaseResponse<List<UserDTO>> testCopy() {
+        List<User> list = userService.list();
+        BeanUtils.copyProperties(list,UserDTO.class);
+        return ResultUtils.success();
+    }
+
+    @ApiOperation("测试DTO在父类的基础上扩展")
+    @PostMapping("/testDTO02/{id}")
+    public BaseResponse<UserDTO> extendDTO2(@PathVariable(value = "id") Long id) {
+        User user = userService.getById(id);
+        UserDTO userDTO = UserConvert2DTO.INSTANCE.toCovertUserDTO(user);
+        return ResultUtils.success(userDTO);
+    }
+
+
 }

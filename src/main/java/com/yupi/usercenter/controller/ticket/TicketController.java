@@ -1,11 +1,15 @@
 package com.yupi.usercenter.controller.ticket;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yupi.usercenter.common.BaseResponse;
 import com.yupi.usercenter.common.ResultUtils;
 import com.yupi.usercenter.model.domain.Ticket;
 import com.yupi.usercenter.model.domain.User;
 import com.yupi.usercenter.service.TicketService;
 import com.yupi.usercenter.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,5 +54,20 @@ public class TicketController {
         return null;
     }
 
+    @PostMapping("/insert")
+    public BaseResponse<?> insertTicket() {
+        ticketService.insertTicket();
+        return ResultUtils.success();
+    }
+
+    @GetMapping("/listPage")
+    @ApiOperation("分页查询")
+    public BaseResponse<?> list(long current, long size) {
+        Page<Ticket> ticketPage = new Page<>(current, size);
+        List<Ticket> ticketList = ticketService.selectList(ticketPage,null);
+//        List<Ticket> list = ticketService.list();
+        Page<Ticket> ticketPage1 = ticketPage.setRecords(ticketList);
+        return ResultUtils.success(ticketPage1);
+    }
 
 }
