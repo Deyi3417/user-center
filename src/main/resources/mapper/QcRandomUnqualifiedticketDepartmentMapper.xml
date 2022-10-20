@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="generator.mapper.QcRandomUnqualifiedticketDepartmentMapper">
+
+    <resultMap id="BaseResultMap" type="generator.domain.QcRandomUnqualifiedticketDepartment">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="randomUnqualifiedTicketId" column="random_unqualified_ticket_id" jdbcType="INTEGER"/>
+            <result property="level" column="level" jdbcType="SMALLINT"/>
+            <result property="responsibleDepartmentId" column="responsible_department_id" jdbcType="INTEGER"/>
+            <result property="attr" column="attr" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,random_unqualified_ticket_id,level,
+        responsible_department_id,attr
+    </sql>
+</mapper>
