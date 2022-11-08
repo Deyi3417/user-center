@@ -65,7 +65,15 @@ public class TicketController {
     public BaseResponse<?> list(long current, long size) {
         Page<Ticket> ticketPage = new Page<>(current, size);
         List<Ticket> ticketList = ticketService.selectList(ticketPage,null);
-//        List<Ticket> list = ticketService.list();
+        Page<Ticket> ticketPage1 = ticketPage.setRecords(ticketList);
+        return ResultUtils.success(ticketPage1);
+    }
+
+    @GetMapping("/page")
+    @ApiOperation("分页查询02")
+    public BaseResponse<?> page(long current, long size) {
+        Page<Ticket> ticketPage = new Page<>(current, size);
+        List<Ticket> ticketList = ticketService.selectList(ticketPage,null);
         Page<Ticket> ticketPage1 = ticketPage.setRecords(ticketList);
         return ResultUtils.success(ticketPage1);
     }
