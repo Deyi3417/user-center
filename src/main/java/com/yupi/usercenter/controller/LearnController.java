@@ -167,5 +167,14 @@ public class LearnController {
         return ResultUtils.success(userDTO);
     }
 
+    @ApiOperation("测试生产二维码")
+    @PostMapping("/code")
+    public BaseResponse code(HttpServletResponse response) {
+
+        return null;
+    }
+
+
+
 
 }
