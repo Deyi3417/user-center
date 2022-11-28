@@ -16,6 +16,7 @@ import com.yupi.usercenter.mapstruct.basic.TicketConvert2DTO;
 import com.yupi.usercenter.model.domain.Ticket;
 import com.yupi.usercenter.model.domain.dto.TicketDTO;
 import com.yupi.usercenter.model.domain.dto.UpdateTicketDTO;
+import com.yupi.usercenter.model.domain.vo.PageSearchDTO;
 import com.yupi.usercenter.service.TicketService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.BooleanUtils;
@@ -172,6 +173,21 @@ public class TicketServiceImpl extends ServiceImpl<TicketMapper, Ticket>
     @Override
     public List<Ticket> selectList(Page<Ticket> ticketPage, Object o) {
         return this.baseMapper.getTicketList(ticketPage,null);
+    }
+
+    @Override
+    public List<Ticket> getTicketList(Page<Ticket> page, PageSearchDTO pageParams) {
+        return this.baseMapper.getTicketList(page, pageParams);
+    }
+
+    @Override
+    public List<Ticket> getTicketByIds(String[] ids) {
+        return this.baseMapper.getTicketByIds(ids);
+    }
+
+    @Override
+    public List<Ticket> getTicketByIdsList(List<String> list) {
+        return this.baseMapper.getTicketByIdsList(list);
     }
 
     private void unlock(String lockKey) {

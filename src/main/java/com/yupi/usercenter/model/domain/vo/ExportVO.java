@@ -1,5 +1,6 @@
 package com.yupi.usercenter.model.domain.vo;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -19,32 +20,38 @@ public class ExportVO {
     /**
      * 用户id(主键)
      */
+    @ExcelProperty("主键")
     private Long id;
 
     /**
      * 昵称
      */
+    @ExcelProperty("昵称")
     private String username;
 
 
     /**
      * 登录账号
      */
+    @ExcelProperty("登录账号")
     private String userAccount;
 
     /**
      * 性别名字
      */
+    @ExcelProperty("性别名字")
     private String genderName;
 
     /**
      * 电话
      */
+    @ExcelProperty("电话")
     private String phone;
 
     /**
      * 创建时间
      */
+    @ExcelProperty("创建时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 

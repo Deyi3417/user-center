@@ -35,4 +35,26 @@
             `ticket` t
         WHERE t.`dlt` = 0
     </select>
+    <select id="getTicketByIds" resultType="com.yupi.usercenter.model.domain.Ticket">
+        SELECT
+            *
+        FROM
+            `ticket` t
+        WHERE t.`id` IN
+        <foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        ORDER BY t.`id`
+    </select>
+    <select id="getTicketByIdsList" resultType="com.yupi.usercenter.model.domain.Ticket">
+        SELECT
+        *
+        FROM
+        `ticket` t
+        WHERE t.`id` IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        ORDER BY t.`id`
+    </select>
 </mapper>

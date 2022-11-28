@@ -7,14 +7,14 @@ import com.yupi.usercenter.common.BaseResponse;
 import com.yupi.usercenter.common.ResultUtils;
 import com.yupi.usercenter.model.domain.Ticket;
 import com.yupi.usercenter.model.domain.User;
+import com.yupi.usercenter.model.domain.vo.PageSearchDTO;
 import com.yupi.usercenter.service.TicketService;
 import com.yupi.usercenter.service.UserService;
+import com.yupi.usercenter.util.ToolUtil;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -26,6 +26,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/ticket")
 @Slf4j
+@Api(tags = "不合格票控制器")
 public class TicketController {
 
     @Resource
@@ -41,6 +42,26 @@ public class TicketController {
 //        List<Ticket> ticketList = ticketService.list();
         return ResultUtils.success(ticket);
     }
+
+    @GetMapping("/ticketList")
+    @ApiOperation("获取不合格票列表")
+    public BaseResponse getTicketList(@RequestParam PageSearchDTO pageParams) {
+        log.debug("测试分页查询，模糊搜索，以及导出excel表，主要还是测试@RequestBody与Post请求方式搭配");
+        Long current = pageParams.getCurrent();
+        if (ToolUtil.isEmpty(current)) {
+            current = 0L;
+        }
+        Long size = pageParams.getSize();
+        if (ToolUtil.isEmpty(size)) {
+            size = 99999L;
+        }
+
+        Page<Ticket> page = new Page<>(current, size);
+        List<Ticket> ticketList = ticketService.getTicketList(page, pageParams);
+        Page<Ticket> ticketPage = page.setRecords(ticketList);
+        return ResultUtils.success(ticketPage);
+    }
+
 
     @GetMapping("/list02")
     public BaseResponse<List<User>> userList() {

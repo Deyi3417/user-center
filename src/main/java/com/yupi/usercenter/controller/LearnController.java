@@ -14,6 +14,7 @@ import com.yupi.usercenter.model.domain.User;
 import com.yupi.usercenter.model.domain.dto.TicketDTO;
 import com.yupi.usercenter.model.domain.dto.UserDTO;
 import com.yupi.usercenter.model.domain.dto.UserDTO2;
+import com.yupi.usercenter.model.domain.vo.DownloadDataVO;
 import com.yupi.usercenter.model.domain.vo.ExportVO;
 import com.yupi.usercenter.model.domain.vo.TestVO;
 import com.yupi.usercenter.model.domain.vo.UserVo;
@@ -29,8 +30,10 @@ import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -69,11 +72,12 @@ public class LearnController {
     }
 
     @GetMapping("/export")
+    @ApiOperation("导出excel表格-有模板")
     public void exportExcel(HttpServletResponse response) throws IOException {
         log.info("liudy23执行了");
         List<ExportVO> userVOList = userService.getExportUser();
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        response.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("utf-8");
         SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
         String format = sdf.format(new Date());
         String fileName = URLEncoder.encode("用户表-"+format, "UTF-8").replaceAll("\\+", "%20");
@@ -90,6 +94,25 @@ public class LearnController {
         excelWriter.fill(userVOList, writeSheet);
         excelWriter.finish();
         os.close();
+    }
+
+    @GetMapping("/downloadExcel")
+    @ApiOperation("下载excel表格-非模板")
+    public void downloadExcel(HttpServletResponse response) {
+        try {
+            List<ExportVO> userVOList = userService.getExportUser();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
+            String format = sdf.format(new Date());
+            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            response.setCharacterEncoding("utf-8");
+            String fileName = URLEncoder.encode("用户表-" + format, "UTF-8").replaceAll("\\+", "%20");
+            response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName + ".xlsx");
+            EasyExcel.write(response.getOutputStream(), ExportVO.class).sheet("模板").doWrite(userVOList);
+        } catch (IOException e) {
+            log.error("导出excel表格失败：",e);
+        }
+
+
     }
 
     @PostMapping("/testJSON")
@@ -167,14 +190,25 @@ public class LearnController {
         return ResultUtils.success(userDTO);
     }
 
-    @ApiOperation("测试生产二维码")
-    @PostMapping("/code")
-    public BaseResponse code(HttpServletResponse response) {
-
-        return null;
+    @ApiOperation("测试-array")
+    @GetMapping("/str")
+    public BaseResponse arrayStr(String str) {
+        String[] split = str.split(",");
+        List<Ticket> result = ticketService.getTicketByIds(split);
+        return ResultUtils.success(result);
     }
 
-
+    @ApiOperation("测试-list")
+    @GetMapping("/list")
+    public BaseResponse listStr(String str) {
+        String[] split = str.split(",");
+        List<String> list = new ArrayList<>();
+        for (String s : split) {
+            list.add(s);
+        }
+        List<Ticket> result = ticketService.getTicketByIdsList(list);
+        return ResultUtils.success(result);
+    }
 
 
 }
