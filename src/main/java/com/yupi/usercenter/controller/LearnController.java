@@ -5,6 +5,7 @@ import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yupi.usercenter.common.BaseResponse;
 import com.yupi.usercenter.common.ResultUtils;
 import com.yupi.usercenter.mapstruct.basic.TicketConvert2DTO;
@@ -14,10 +15,7 @@ import com.yupi.usercenter.model.domain.User;
 import com.yupi.usercenter.model.domain.dto.TicketDTO;
 import com.yupi.usercenter.model.domain.dto.UserDTO;
 import com.yupi.usercenter.model.domain.dto.UserDTO2;
-import com.yupi.usercenter.model.domain.vo.DownloadDataVO;
-import com.yupi.usercenter.model.domain.vo.ExportVO;
-import com.yupi.usercenter.model.domain.vo.TestVO;
-import com.yupi.usercenter.model.domain.vo.UserVo;
+import com.yupi.usercenter.model.domain.vo.*;
 import com.yupi.usercenter.service.TicketService;
 import com.yupi.usercenter.service.UserService;
 import io.swagger.annotations.Api;
@@ -33,9 +31,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * liudy23学习接口
@@ -111,9 +107,42 @@ public class LearnController {
         } catch (IOException e) {
             log.error("导出excel表格失败：",e);
         }
-
-
     }
+
+    /*
+     * 导出excel easyExcel版本的问题
+
+    @GetMapping("/exportExcel")
+    @ApiOperation("工艺纪律检查导出excel")
+    public void exportExcel(@RequestParam Map<String, Object> params, HttpServletResponse response) {
+        try {
+            Page<CraftDisciplineCheckListVO> page = new PageFactory<CraftDisciplineCheckListVO>().defaultNoPage();
+            List<CraftDisciplineCheckListVO> exportData = craftDisciplineCheckService.getWebCraftListWithParams(page, params);
+
+//        String fileName = String.format("工艺纪律检查表_%s", DateUtil.format(new Date(), "yyyyMMdd"));
+            response.reset();
+            response.setContentType("multipart/form-data;charset=UTF-8");
+//        response.setHeader("Content-Disposition", "attachment; filename=\"" + new String(fileName.getBytes("gbk"), "iso8859-1") + ".xls\"");
+//        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            response.setCharacterEncoding("utf-8");
+
+            String format = DateFormatUtils.format(new Date(), "yyMMddHHmmss");
+            String fileName = URLEncoder.encode("工艺纪律检查表-" + format, "UTF-8").replaceAll("\\+", "%20");
+            response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName + ".xls");
+            ServletOutputStream os = null;
+            os = response.getOutputStream();
+            ExcelWriter excelWriter = EasyExcel.write(os).withTemplate("D:/tmp/doc/exportTemplate/craftTemplate.xls").excelType(ExcelTypeEnum.XLS).build();
+            WriteSheet writeSheet = EasyExcel.writerSheet().build();
+            os.flush();
+            excelWriter.fill(exportData, writeSheet);
+            excelWriter.finish();
+            os.close();
+            log.info("导出工艺纪律检查票数据成功");
+        } catch (IOException e) {
+            log.error("导出工艺纪律检查数据失败：", e);
+        }
+    }
+     */
 
     @PostMapping("/testJSON")
     public List<TestVO> getUserVo() {
@@ -198,6 +227,26 @@ public class LearnController {
         return ResultUtils.success(result);
     }
 
+    @ApiOperation("测试-传数组")
+    @GetMapping("/ids")
+    public BaseResponse listInteger(@RequestParam List<Long> ids) {
+        List<Ticket> result = ticketService.list(new QueryWrapper<Ticket>().in("id", ids));
+        List<Long> userIds = new ArrayList<>();
+        List<User> user = userService.list(new QueryWrapper<User>().eq("is_delete", 0).orderBy(true,false,"id"));
+        for (User u: user) {
+            userIds.add(u.getId());
+        }
+        for (Long uid : ids) {
+            if (userIds.contains(uid)) {
+                userIds.remove(uid);
+            }
+        }
+
+        return ResultUtils.success(userIds);
+    }
+
+
+
     @ApiOperation("测试-list")
     @GetMapping("/list")
     public BaseResponse listStr(String str) {
@@ -209,6 +258,31 @@ public class LearnController {
         List<Ticket> result = ticketService.getTicketByIdsList(list);
         return ResultUtils.success(result);
     }
+
+    @ApiOperation("测试-listAdd")
+    @GetMapping("/listAdd")
+    public BaseResponse getUserList() {
+        List<UserPullVO> userList  = new ArrayList<>();
+        UserPullVO userPullVO = new UserPullVO();
+        userPullVO.setId(1L);
+        userPullVO.setUsername("liudy23");
+        userList.add(userPullVO);
+
+        userPullVO.setId(2L);
+        userPullVO.setUsername("suyao");
+        userList.add(userPullVO);
+
+        for (int i = 0; i < 3; i ++) {
+            UserPullVO user = new UserPullVO();
+            user.setId(10L+i);
+            user.setUsername("liudy_" + i);
+            userList.add(user);
+        }
+
+        return ResultUtils.success(userList);
+    }
+
+
 
 
 }

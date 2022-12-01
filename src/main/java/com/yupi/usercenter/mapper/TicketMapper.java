@@ -14,6 +14,13 @@ import java.util.List;
  */
 public interface TicketMapper extends BaseMapper<Ticket> {
 
+    /**
+     * 获取不合格票列表
+     *
+     * @param ticketPage 分页信息
+     * @param o 查询参数
+     * @return List<Ticket>
+     */
     List<Ticket> getTicketList(Page<Ticket> ticketPage, Object o);
 
     /**

@@ -235,3 +235,46 @@ insert  into `user`(`id`,`username`,`user_account`,`avatar_url`,`gender`,`user_p
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+
+-- 系统字典表
+Create Table
+
+    CREATE TABLE `sys_dict` (
+    `dict_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '字典id',
+    `dict_code` varchar(25) DEFAULT NULL COMMENT '字典编码',
+    `dict_name` varchar(50) DEFAULT NULL COMMENT '字典名称-展示用',
+    `dict_class` varchar(50) DEFAULT NULL COMMENT '字典分类',
+    `is_delete` tinyint(4) DEFAULT '0' COMMENT '逻辑删除(0-未删除 1-已删除)',
+    `create_id` int(11) DEFAULT NULL COMMENT '创建人id',
+    `create_name` varchar(50) DEFAULT NULL COMMENT '创建人name',
+    `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+    `modify_id` int(11) DEFAULT NULL COMMENT '修改人id',
+    `modify_name` varchar(50) DEFAULT NULL COMMENT '修改人name',
+    `modify_time` datetime DEFAULT NULL COMMENT '修改时间',
+    PRIMARY KEY (`dict_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统字典表'
+
+
+
+-- 系统字典项表
+Create Table
+
+    CREATE TABLE `sys_dict_item` (
+    `item_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '字典项id',
+    `dict_id` int(11) DEFAULT NULL COMMENT '字典主键id',
+    `item_code` varchar(25) COLLATE utf8_bin DEFAULT NULL COMMENT '字典项编码',
+    `item_name` varchar(50) COLLATE utf8_bin DEFAULT NULL COMMENT '字典项名称',
+    `item_value` varchar(50) COLLATE utf8_bin DEFAULT NULL COMMENT '字典项值',
+    `expand1` varchar(50) COLLATE utf8_bin DEFAULT NULL COMMENT '扩展字段1',
+    `expand2` varchar(50) COLLATE utf8_bin DEFAULT NULL COMMENT '扩展字段2',
+    `expand3` varchar(50) COLLATE utf8_bin DEFAULT NULL COMMENT '扩展字段3',
+    `is_delete` tinyint(4) DEFAULT '0' COMMENT '逻辑删除(0-未删除 1-已删除)',
+    `create_id` int(11) DEFAULT NULL COMMENT '创建人id',
+    `create_name` varchar(50) COLLATE utf8_bin DEFAULT NULL COMMENT '创建人name',
+    `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+    `modify_id` int(11) DEFAULT NULL COMMENT '修改人id',
+    `modify_name` varchar(50) COLLATE utf8_bin DEFAULT NULL COMMENT '修改人name',
+    `modify_time` datetime DEFAULT NULL COMMENT '修改时间',
+    PRIMARY KEY (`item_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='系统字典项'
