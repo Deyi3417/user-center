@@ -1,9 +1,8 @@
 package com.yupi.usercenter.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.yupi.usercenter.common.BaseResponse;
 import com.yupi.usercenter.model.domain.User;
-import com.yupi.usercenter.model.domain.dto.UpdateTicketDTO;
+import com.yupi.usercenter.model.domain.dto.SafetyUserDTO;
 import com.yupi.usercenter.model.domain.vo.ExportVO;
 import com.yupi.usercenter.model.domain.vo.TestVO;
 import com.yupi.usercenter.model.domain.vo.UserVo;
@@ -87,4 +86,12 @@ public interface UserService extends IService<User> {
      * @return result
      */
     User getUserById(Integer id);
+
+    /**
+     * 根据标签获取用户
+     *
+     * @param tagNameList 标签列表
+     * @return 安全用户列表
+     */
+    List<SafetyUserDTO> searchUsersByTags(List<String> tagNameList);
 }

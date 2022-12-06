@@ -1,23 +1,24 @@
 package com.yupi.usercenter.service.impl;
-import java.io.*;
-import java.util.Date;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yupi.usercenter.common.ErrorCode;
 import com.yupi.usercenter.constant.UserConstant;
+import com.yupi.usercenter.exception.BusinessException;
+import com.yupi.usercenter.mapper.UserMapper;
+import com.yupi.usercenter.mapstruct.basic.UserConvert2DTO;
 import com.yupi.usercenter.model.domain.User;
+import com.yupi.usercenter.model.domain.dto.SafetyUserDTO;
 import com.yupi.usercenter.model.domain.vo.ExportVO;
 import com.yupi.usercenter.model.domain.vo.TestVO;
 import com.yupi.usercenter.model.domain.vo.UserVo;
 import com.yupi.usercenter.service.UserService;
-import com.yupi.usercenter.mapper.UserMapper;
-import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jxls.transformer.XLSTransformer;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -26,6 +27,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.*;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -116,7 +118,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         User safetyUser = getSafetyUser(user);
         // 4. 记录用户的登录态 redis 分布式登录
         HttpSession session = request.getSession();
-        session.setAttribute(UserConstant.USER_LOGIN_STATE,safetyUser);
+        session.setAttribute(UserConstant.USER_LOGIN_STATE, safetyUser);
         return safetyUser;
     }
 
@@ -144,7 +146,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    @SuppressWarnings({"rawtypes","finally"})
+    @SuppressWarnings({"rawtypes", "finally"})
     public Workbook getWorkbookByTpl(String tplName, Map data) throws FileNotFoundException {
         XLSTransformer transformer = new XLSTransformer();
         String templatePath = "D:/File_liudy23/Code_File" + tplName;
@@ -167,13 +169,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             return wb;
         }
     }
+
     @Override
     public void renderExcel(Workbook wb, String tplName, String fileName) {
         if (fileName == null || "".equals(fileName)) {
             fileName = tplName.substring(tplName.lastIndexOf("/") + 1);
         }
         try {
-            fileName = new String(fileName.getBytes("gbk"),"ISO-8859-1");
+            fileName = new String(fileName.getBytes("gbk"), "ISO-8859-1");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -181,7 +184,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
             response.reset();
             response.setContentType("application/vnd.ms-excel;charset=UTF-8");
-            response.setHeader("Content-Disposition","attachment;filename=\""+ fileName + "\"");
+            response.setHeader("Content-Disposition", "attachment;filename=\"" + fileName + "\"");
             OutputStream os = response.getOutputStream();
             wb.write(os);
             os.flush();
@@ -222,6 +225,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return this.baseMapper.selectById(id);
     }
 
+    @Override
+    public List<SafetyUserDTO> searchUsersByTags(List<String> tagNameList) {
+        // 避免传值为空
+        if (CollectionUtils.isEmpty(tagNameList)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("is_delete",0);
+        for (String tagName : tagNameList) {
+            queryWrapper = queryWrapper.like("tags", tagName);
+        }
+
+        List<User> userList = userMapper.selectList(queryWrapper);
+        List<SafetyUserDTO> safetyUserList = UserConvert2DTO.INSTANCE.toCovetSafetyUserDTOList(userList);
+        return safetyUserList;
+    }
 
 
 }

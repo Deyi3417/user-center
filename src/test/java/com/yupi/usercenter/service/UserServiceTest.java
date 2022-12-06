@@ -1,15 +1,15 @@
 package com.yupi.usercenter.service;
-import java.util.Date;
 
 import com.yupi.usercenter.model.domain.User;
+import com.yupi.usercenter.model.domain.dto.SafetyUserDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
-
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @SpringBootTest
 class UserServiceTest {
@@ -18,7 +18,7 @@ class UserServiceTest {
     private UserService userService;
 
     @Test
-    public void testAddUser(){
+    public void testAddUser() {
         User user = new User();
         user.setUsername("刘德意");
         user.setUserAccount("liudy23");
@@ -30,6 +30,13 @@ class UserServiceTest {
         boolean result = userService.save(user);
         System.out.println(user.getId());
         Assertions.assertTrue(result);
+    }
+
+    @Test
+    public void testSearchUsersByTags() {
+        List<String> tagsNameList = Arrays.asList("Java","Python");
+        List<SafetyUserDTO> resultUsers = userService.searchUsersByTags(tagsNameList);
+        Assertions.assertNotNull(resultUsers);
     }
 
 }
