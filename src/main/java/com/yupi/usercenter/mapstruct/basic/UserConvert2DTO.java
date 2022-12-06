@@ -1,6 +1,7 @@
 package com.yupi.usercenter.mapstruct.basic;
 
 import com.yupi.usercenter.model.domain.User;
+import com.yupi.usercenter.model.domain.dto.SafetyUserDTO;
 import com.yupi.usercenter.model.domain.dto.UserDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -40,4 +41,20 @@ public interface UserConvert2DTO {
      * @return User
      */
     User toConvertUser(UserDTO userDTO);
+
+    /**
+     * User脱敏
+     *
+     * @param user 用户
+     * @return SafetyUserDTO
+     */
+    SafetyUserDTO toCovetSafetyUserDTO(User user);
+
+    /**
+     * 用户信息脱敏
+     *
+     * @param users 用户list
+     * @return List<SafetyUserDTO>
+     */
+    List<SafetyUserDTO> toCovetSafetyUserDTOList(List<User> users);
 }
