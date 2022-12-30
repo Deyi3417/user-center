@@ -232,7 +232,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("is_delete",0);
         for (String tagName : tagNameList) {
             queryWrapper = queryWrapper.like("tags", tagName);
         }

@@ -5,6 +5,7 @@ import com.yupi.usercenter.model.domain.dto.SafetyUserDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -37,6 +38,11 @@ class UserServiceTest {
         List<String> tagsNameList = Arrays.asList("Java","Python");
         List<SafetyUserDTO> resultUsers = userService.searchUsersByTags(tagsNameList);
         Assertions.assertNotNull(resultUsers);
+    }
+
+    @Test
+    public void testHttpStatus() {
+        System.out.println(HttpStatus.OK.value());
     }
 
 }
