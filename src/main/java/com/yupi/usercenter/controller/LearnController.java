@@ -1,7 +1,9 @@
 package com.yupi.usercenter.controller;
 
+import cn.hutool.core.io.resource.ResourceUtil;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.support.ExcelTypeEnum;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -15,7 +17,10 @@ import com.yupi.usercenter.model.domain.User;
 import com.yupi.usercenter.model.domain.dto.TicketDTO;
 import com.yupi.usercenter.model.domain.dto.UserDTO;
 import com.yupi.usercenter.model.domain.dto.UserDTO2;
-import com.yupi.usercenter.model.domain.vo.*;
+import com.yupi.usercenter.model.domain.vo.ExportVO;
+import com.yupi.usercenter.model.domain.vo.TestVO;
+import com.yupi.usercenter.model.domain.vo.UserPullVO;
+import com.yupi.usercenter.model.domain.vo.UserVo;
 import com.yupi.usercenter.service.TicketService;
 import com.yupi.usercenter.service.UserService;
 import io.swagger.annotations.Api;
@@ -28,10 +33,11 @@ import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * liudy23学习接口
@@ -84,6 +90,8 @@ public class LearnController {
         ServletOutputStream os = null;
         os = response.getOutputStream();
         ExcelWriter excelWriter = EasyExcel.write(os).withTemplate("D:/File_liudy23/temp/template/userTemplate.xlsx").build();
+        // 方式2
+        // EasyExcel.write(os).withTemplate(ResourceUtil.getStream("模板文件相对路径：static/userTemplate.xlsx")).excelType(ExcelTypeEnum.XLSX).build();
         WriteSheet writeSheet = EasyExcel.writerSheet().build();
 //        FillConfig fillConfig = FillConfig.builder().direction(WriteDirectionEnum.VERTICAL).build();
         os.flush();
