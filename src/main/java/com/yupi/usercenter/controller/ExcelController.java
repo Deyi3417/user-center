@@ -4,8 +4,11 @@ import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.util.ListUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yupi.usercenter.constant.DateUtil;
+import com.yupi.usercenter.enums.GenderEnum;
+import com.yupi.usercenter.listener.EasyExcelListener;
 import com.yupi.usercenter.mapper.UserMapper;
 import com.yupi.usercenter.model.domain.User;
+import com.yupi.usercenter.model.domain.dto.ImportUserData;
 import com.yupi.usercenter.model.domain.vo.DownloadDataVO;
 import com.yupi.usercenter.service.UserService;
 import io.swagger.annotations.Api;
@@ -134,6 +137,23 @@ public class ExcelController {
             list.add(data);
         }
         return list;
+    }
+
+    @GetMapping("/import")
+    @ApiOperation("测试导入")
+    public void testImport() {
+        EasyExcel.read("D:/tmp/easyExcel/user.xls", ImportUserData.class, new EasyExcelListener())
+                .sheet()
+                .doRead();
+    }
+    @GetMapping("/testEnum")
+    @ApiOperation("测试枚举")
+    public void testEnum(@RequestParam String name) {
+        for (GenderEnum enumValue : GenderEnum.values()) {
+            System.out.println(enumValue.getCode() + "----" + enumValue.getName());
+        }
+        Integer codeByName = GenderEnum.getCodeByName(name);
+        System.out.println("result:" + codeByName);
     }
 
 
