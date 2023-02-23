@@ -4,34 +4,37 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
 import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * 责任部门
+ *
+ * @author HP
  * @TableName qc_responsible_department
  */
-@TableName(value ="qc_responsible_department")
+@TableName(value = "qc_responsible_department")
 @Data
 public class QcResponsibleDepartment implements Serializable {
     /**
-     * 
+     *
      */
     @TableId(type = IdType.AUTO)
     private Integer id;
 
     /**
-     * 
+     *
      */
     private String responsibleDepartmentName;
 
     /**
-     * 
+     *
      */
     private Integer parentId;
 
     /**
-     * 
+     *
      */
     private Integer level;
 
@@ -51,9 +54,9 @@ public class QcResponsibleDepartment implements Serializable {
         }
         QcResponsibleDepartment other = (QcResponsibleDepartment) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getResponsibleDepartmentName() == null ? other.getResponsibleDepartmentName() == null : this.getResponsibleDepartmentName().equals(other.getResponsibleDepartmentName()))
-            && (this.getParentId() == null ? other.getParentId() == null : this.getParentId().equals(other.getParentId()))
-            && (this.getLevel() == null ? other.getLevel() == null : this.getLevel().equals(other.getLevel()));
+                && (this.getResponsibleDepartmentName() == null ? other.getResponsibleDepartmentName() == null : this.getResponsibleDepartmentName().equals(other.getResponsibleDepartmentName()))
+                && (this.getParentId() == null ? other.getParentId() == null : this.getParentId().equals(other.getParentId()))
+                && (this.getLevel() == null ? other.getLevel() == null : this.getLevel().equals(other.getLevel()));
     }
 
     @Override

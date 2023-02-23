@@ -2,6 +2,7 @@ package com.yupi.usercenter.controller.ticket;
 
 import com.yupi.usercenter.common.BaseResponse;
 import com.yupi.usercenter.common.ResultUtils;
+import com.yupi.usercenter.model.domain.vo.DepartmentVO;
 import com.yupi.usercenter.model.domain.vo.RandomTicketVO;
 import com.yupi.usercenter.service.QcResponsibleDepartmentService;
 import io.swagger.annotations.ApiOperation;
@@ -32,6 +33,14 @@ public class RandomTicketController {
         List<RandomTicketVO> randomTicketVOList = departmentService.getDepartmentList();
         return ResultUtils.success(randomTicketVOList);
     }
+
+    @GetMapping("/departmentTree")
+    @ApiOperation("获取责任部门树形结构")
+    public BaseResponse<List<DepartmentVO>> getDepartmentTree() {
+        List<DepartmentVO> tree = departmentService.getDepartmentTree();
+        return ResultUtils.success(tree);
+    }
+
 
     @GetMapping("/chooseDepartment")
     @ApiOperation("获取不合格处置已选择的部门信息")

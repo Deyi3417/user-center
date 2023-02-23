@@ -1,6 +1,7 @@
 package com.yupi.usercenter.controller;
 
 import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.read.listener.PageReadListener;
 import com.alibaba.excel.util.ListUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yupi.usercenter.constant.DateUtil;
@@ -16,17 +17,17 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URLEncoder;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -145,6 +146,26 @@ public class ExcelController {
         EasyExcel.read("D:/tmp/easyExcel/user.xls", ImportUserData.class, new EasyExcelListener())
                 .sheet()
                 .doRead();
+    }
+
+    @PostMapping("/import02")
+    @ApiOperation("测试导入")
+    public void testImport(MultipartFile uploadExcelFile) {
+        try {
+            InputStream inputStream = uploadExcelFile.getInputStream();
+            List<ImportUserData> importUserDataList = new ArrayList<>();
+            EasyExcel.read(inputStream, ImportUserData.class, new PageReadListener<ImportUserData>(importUserDataList::addAll)).sheet().doRead();
+            EasyExcel.read(inputStream, ImportUserData.class, new PageReadListener(new Consumer<List>() {
+                        @Override
+                        public void accept(List list) {
+                            importUserDataList.addAll((Collection<? extends ImportUserData>) list);
+                        }
+                    }))
+                    .sheet()
+                    .doRead();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     @GetMapping("/testEnum")
     @ApiOperation("测试枚举")

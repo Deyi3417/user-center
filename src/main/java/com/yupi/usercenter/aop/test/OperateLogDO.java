@@ -4,10 +4,10 @@ import lombok.Data;
 
 /**
  * @author : HP
- * @date : 2023/2/10
+ * @date : 2023/2/15
  */
 @Data
-public class UpdateOrder {
+public class OperateLogDO {
 
     private Long orderId;
 
