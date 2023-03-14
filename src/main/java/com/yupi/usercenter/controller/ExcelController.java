@@ -1,9 +1,14 @@
 package com.yupi.usercenter.controller;
 
 import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.read.listener.PageReadListener;
 import com.alibaba.excel.util.ListUtils;
+import com.alibaba.excel.write.metadata.WriteSheet;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.yupi.usercenter.common.BaseResponse;
+import com.yupi.usercenter.common.ErrorCode;
+import com.yupi.usercenter.common.ResultUtils;
 import com.yupi.usercenter.constant.DateUtil;
 import com.yupi.usercenter.enums.GenderEnum;
 import com.yupi.usercenter.listener.EasyExcelListener;
@@ -11,17 +16,25 @@ import com.yupi.usercenter.mapper.UserMapper;
 import com.yupi.usercenter.model.domain.User;
 import com.yupi.usercenter.model.domain.dto.ImportUserData;
 import com.yupi.usercenter.model.domain.vo.DownloadDataVO;
+import com.yupi.usercenter.model.domain.vo.ExportVO;
 import com.yupi.usercenter.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.util.MimeType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,6 +52,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/excelPort")
 @Api("EasyExcel测试类")
+@Slf4j
 public class ExcelController {
     @Resource
     private UserService userService;
@@ -177,6 +191,67 @@ public class ExcelController {
         System.out.println("result:" + codeByName);
     }
 
+    @GetMapping("expToLocal")
+    @ApiOperation("使用easyExcel导出数据到本地文件夹")
+    public BaseResponse<?> expToLocal() {
+        String templateFileName = "D:\\File_liudy23\\temp\\template\\userTemplate.xlsx";
+        String dateString = DateFormatUtils.format(new Date(), "yyyyMMddHHmmss");
+        StringBuffer fileName = new StringBuffer();
+        fileName.append("liudy23_").append(dateString).append(".xlsx");
+        String outputFileName = "D:\\tmp\\easyExcel\\" + fileName;
+        ExcelWriter writer = EasyExcel.write(outputFileName).withTemplate(templateFileName).build();
+        WriteSheet writeSheet = EasyExcel.writerSheet().build();
+        List<ExportVO> exportUser = userService.getExportUser();
+        writer.fill(exportUser, writeSheet);
+        writer.finish();
+        return ResultUtils.success(outputFileName);
+    }
+
+    @GetMapping("downLocalFile")
+    @ApiOperation("根据路径下载文件")
+    public BaseResponse<?> downLocalFileByPath(String filePath, HttpServletResponse response) {
+        String fileName = filePath.substring(filePath.lastIndexOf("/") + 1);
+        response.setContentType("application/force-download");
+        response.setHeader("Access-Control-Allow-Origin","*");
+//        response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+        response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName);
+        try {
+            FileInputStream fileInputStream = new FileInputStream(filePath);
+            ServletOutputStream os = response.getOutputStream();
+            IOUtils.copyLarge(fileInputStream,os);
+            os.flush();
+            os.close();
+            fileInputStream.close();
+            return ResultUtils.success(filePath);
+        } catch (Exception e) {
+            log.error("操作异常,无法下载");
+            return ResultUtils.error(ErrorCode.SYSTEM_ERROR);
+        }
+    }
 
 
+    @GetMapping("downLocalFile02")
+    @ApiOperation("根据路径下载文件02")
+    public BaseResponse<?> downLocalFileByPath02(String filePath, HttpServletResponse response) {
+        String fileName = filePath.substring(filePath.lastIndexOf("/") + 1);
+        response.setContentType("application/force-download");
+        response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName);
+        try {
+            FileInputStream fileInputStream = new FileInputStream(filePath);
+            ServletOutputStream os = response.getOutputStream();
+            byte[] bytes = new byte[1024];
+            int n;
+            while ((n=fileInputStream.read(bytes)) != -1) {
+                os.write(bytes, 0, n);
+                os.flush();
+            }
+            os.flush();
+            os.close();
+            fileInputStream.close();
+            return ResultUtils.success(filePath);
+        } catch (Exception e) {
+            log.error("操作异常,无法下载");
+            return ResultUtils.error(ErrorCode.SYSTEM_ERROR);
+        }
+    }
 }

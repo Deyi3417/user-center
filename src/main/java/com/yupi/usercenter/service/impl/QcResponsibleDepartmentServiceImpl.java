@@ -71,6 +71,14 @@ public class QcResponsibleDepartmentServiceImpl extends ServiceImpl<QcResponsibl
             parent.setChildDepartmentList(getChildDepartments(parent, departmentVOS));
             return parent;
         }).collect(Collectors.toList());
+
+        log.info("{}==before :输出根部门数据：{}", DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss"), JSON.toJSONString(parentDepartments));
+        for (DepartmentVO vo : parentDepartments) {
+            vo.setChildDepartmentList(getChildDepartments(vo, departmentVOS));
+        }
+
+        log.info("{}==after :输出根部门数据：{}", DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss"), JSON.toJSONString(parentDepartments));
+
         return collect;
 
     }
