@@ -79,6 +79,13 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.deepoove/poi-tl -->
+        <dependency>
+            <groupId>com.deepoove</groupId>
+            <artifactId>poi-tl</artifactId>
+            <version>1.11.0</version>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
@@ -271,6 +278,11 @@
                 </configuration>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+<!--   配置此处，相对路径可以读取到该路径下的文件             -->
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
     </build>
-
 </project>

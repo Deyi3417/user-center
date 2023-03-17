@@ -1,13 +1,52 @@
 package com.yupi.usercenter.util;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Date;
 
+/**
+ * @author HP
+ */
 @Slf4j
 public class FileUtil {
+
+    /**
+     * .docx word文档后缀
+     */
+    public static final String FILE_NAME_SUFFIX_DOCX = DateFormatUtils.format(new Date(), "HHmmss") + ".docx";
+
+    /**
+     * .xlsx excel文档后缀
+     */
+    public static final String FILE_NAME_SUFFIX_XLSX = DateFormatUtils.format(new Date(), "HHmmss") + ".xlsx";
+
+    /**
+     * .xls excel文档后缀
+     */
+    public static final String FILE_NAME_SUFFIX_SLX = DateFormatUtils.format(new Date(), "HHmmss") + ".xls";
+
+    /**
+     * .pdf pdf文档后缀
+     */
+    public static final String FILE_NAME_SUFFIX_PDF = DateFormatUtils.format(new Date(), "HHmmss") + ".pdf";
+
+    /**
+     * 如果文件夹不存在则创建文件夹，并返回该文件夹路径
+     *
+     * @param pathDirectory
+     * @return
+     */
+    public static String getRootPath(String pathDirectory) {
+        File file = new File(pathDirectory);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        return pathDirectory = pathDirectory + File.separator;
+    }
 
     /**
      * 从网络Url中下载文件

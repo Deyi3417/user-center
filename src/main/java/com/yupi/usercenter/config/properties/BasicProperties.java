@@ -5,13 +5,14 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.Serializable;
 
 /**
+ * 配置文件中基本的参数信息
+ *
  * @author : HP
  * @date : 2023/3/16
  */
@@ -27,11 +28,11 @@ public class BasicProperties implements Serializable {
 
     public static final String PREFIX = "basic";
 
-    @ApiModelProperty(name = "userName", value = "配置文件中的 user_name")
-    private String userName;
+    @ApiModelProperty(name = "fileUploadPath", value = "文件上传路径")
+    private String fileUploadPath;
 
-    @ApiModelProperty(name = "userGender", value = "配置文件中的 user-gender")
-    private String userGender;
+    @ApiModelProperty(name = "fileSavePath", value = "文件保存路径")
+    private String fileSavePath;
 
     @ApiModelProperty(name = "address", value = "配置文件中的 address")
     private String address;

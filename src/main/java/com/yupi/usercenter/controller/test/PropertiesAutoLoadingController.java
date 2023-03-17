@@ -28,7 +28,6 @@ public class PropertiesAutoLoadingController {
     @ApiOperation("获取配置文件参数")
     public BaseResponse<?> getProperties() {
         log.info("LIUDY23: " +basicProperties);
-        log.info("liudy23测试：" + basicProperties.getUserGender());
 //        return ResultUtils.success(basicProperties.toString());
         return ResultUtils.success(basicProperties);// 此种输出值会出错
     }

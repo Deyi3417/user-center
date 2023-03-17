@@ -24,6 +24,9 @@ spring:
         max-idle: 8
         min-idle: 0
         max-wait: 100ms
+#  web:
+#    resources:
+#      static-locations: classpath:/resource/static/
 
 server:
   port: 9081
@@ -59,8 +62,8 @@ xxl:
     accessToken:
 basic:
 #  这两种（下划线和横杠都可以解析成驼峰形式）
-  user_name: liudy23
-  user-gender: 男
+  file_upload_path: D:\tmp\usercenter\tempFile
+  file-save-path: D:\tmp\usercenter\saveFile
   address: hunan
 
 

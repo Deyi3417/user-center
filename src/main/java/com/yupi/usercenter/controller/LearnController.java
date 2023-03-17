@@ -33,6 +33,7 @@ import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -89,7 +90,11 @@ public class LearnController {
 //        response.setHeader("Content-Disposition", "attachment; filename=\""+ fileName + ".xls\"");
         ServletOutputStream os = null;
         os = response.getOutputStream();
-        ExcelWriter excelWriter = EasyExcel.write(os).withTemplate("D:/File_liudy23/temp/template/userTemplate.xlsx").build();
+//        ExcelWriter excelWriter = EasyExcel.write(os).withTemplate("D:/File_liudy23/temp/template/userTemplate.xlsx").build();
+        // 这样可以读到相对路径的文件
+        InputStream stream = ResourceUtil.getStream("static/template/excel/userTemplate.xlsx");
+        ExcelWriter excelWriter = EasyExcel.write(os).withTemplate(stream).build();
+
         // 方式2
         // EasyExcel.write(os).withTemplate(ResourceUtil.getStream("模板文件相对路径：static/userTemplate.xlsx")).excelType(ExcelTypeEnum.XLSX).build();
         WriteSheet writeSheet = EasyExcel.writerSheet().build();
@@ -97,6 +102,7 @@ public class LearnController {
         os.flush();
         excelWriter.fill(userVOList, writeSheet);
         excelWriter.finish();
+//        excelWriter.close();
         os.close();
     }
 
