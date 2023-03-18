@@ -68,6 +68,7 @@ public class FileHandlerServiceImpl implements FileHandlerService {
         String saveFilePath = rootPath + fileName;
         try {
             Configure config = Configure.builder().build();
+            // 利用ResourceUtil.getStream()可以读取到相对路径的文件
             InputStream stream = ResourceUtil.getStream("static/template/doc/userdata.docx");
             XWPFTemplate template = XWPFTemplate.compile(stream, config).render(this.generateModels());
 
