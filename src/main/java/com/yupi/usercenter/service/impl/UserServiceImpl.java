@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.sf.jxls.transformer.XLSTransformer;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.DigestUtils;
@@ -43,6 +44,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
+
+    private static final String USER_LIST_KEY = "user:list";
 
     /**
      * 盐值
@@ -206,7 +212,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Override
     public List<User> getUserList() {
-        List<User> userList = this.baseMapper.selectList(new QueryWrapper<User>().eq("isDelete", 0));
+        // 先尝试从 Redis 缓存中获取数据
+        List<User> userList = (List<User>) redisTemplate.opsForHash().get(USER_LIST_KEY, "all");
+        if (userList == null) {
+            // 缓存中没有数据，则从数据库中获取数据
+            userList = this.baseMapper.selectList(new QueryWrapper<User>().eq("isDelete", 0));
+            // 将数据保存到 Redis 缓存中
+            redisTemplate.opsForHash().put(USER_LIST_KEY,"all",userList);
+        }
         return userList;
     }
 

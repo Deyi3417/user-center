@@ -25,6 +25,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -110,18 +113,31 @@ public class TestController {
     @ApiOperation("getArray")
     @GetMapping("/getArray")
     public void testGetArray(@RequestParam Integer[] ids) {
-        log.info("are you ok:{}",ids);
+        log.info("are you ok:{}", ids);
         System.out.println(ids);
     }
 
     @ApiOperation("getArray02")
     @GetMapping("/getArray02")
     public void testGetArray02(@RequestParam(value = "ids[]", required = true) List<String> ids) {
-        log.info("are you ok:{}",ids);
+        log.info("are you ok:{}", ids);
         System.out.println(ids);
     }
 
-
+    @GetMapping("/getUserFromRedis")
+    @ApiOperation("从redis加载用户数据")
+    public List<User> getUserFromRedis() {
+        List<User> userList = new ArrayList<>();
+        try {
+            InetAddress inetAddress = InetAddress.getLocalHost();
+            String ipAddress = inetAddress.getHostAddress();
+            System.out.println("本机IP地址是：" + ipAddress);
+            userList = userService.getUserList();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        return userList;
+    }
 
 
 }
