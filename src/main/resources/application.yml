@@ -48,7 +48,7 @@ swagger:
   enabled: true
 
 xxl:
-  enable: false
+  enable: true
   job:
     admin:
       addresses: http://127.0.0.1:9080/xxl-job-admin
